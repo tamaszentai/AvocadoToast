@@ -23,4 +23,10 @@ export default tseslint.config({
       { allowConstantExport: true },
     ],
   },
+  globals: {
+    chrome: true
+  },
+  env: {
+    "webextensions": true
+  }
 })
