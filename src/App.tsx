@@ -3,13 +3,20 @@ import './App.css'
 import Icon from './assets/icon128.png'
 import {useEffect, useState} from "react";
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
+import Modal from "./components/Modal.tsx";
 
 function App() {
 
     const [bookmarks, setBookmarks] = useState<BookmarkTreeNode[]>([]);
     const [selectedBookmarks, setSelectedBookmarks] = useState<number[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentBookmarkId, setCurrentBookmarkId] = useState<string | null>(null);
 
     useEffect(() => {
+        fetchBookmarks();
+    }, []);
+
+    const fetchBookmarks = () => {
         chrome.bookmarks.getTree(
             function (bookmarkTreeNodes) {
                 if (bookmarkTreeNodes && bookmarkTreeNodes.length > 0) {
@@ -17,7 +24,7 @@ function App() {
                 }
             }
         );
-    }, []);
+    }
 
     const toDateString = (date: string | number | Date | undefined) => {
         return date ? new Date(date).toDateString() : "No date available";
@@ -45,13 +52,27 @@ function App() {
                 <a href={node.url} target="_blank" rel="noopener noreferrer">{node.url}</a>
                 <p>Date added: {toDateString(node.dateAdded)}</p>
                 {node.children && renderBookmarks(node.children)}
+                <button className={"border-black border-2 bg-gray-400"} onClick={() => openModal(node.id)}>Delete Bookmark</button>
             </div>
         ));
     };
 
+    const openModal = (id: string) => {
+        setCurrentBookmarkId(id);
+        setIsModalOpen(true);
+    }
+
+    const removeBookmark = (id: string) => {
+        chrome.bookmarks.remove(id).then(_ => {
+            fetchBookmarks();
+        });
+    }
+
     return (
         <>
-            <div className={"h-52 w-96 bg-amber-100 border-black border-2 overflow-y-scroll"}>
+            {isModalOpen && <Modal id={currentBookmarkId} removeBookmark={removeBookmark} setIsModalOpen={setIsModalOpen} />
+            }
+            <div className={"bg-amber-100 border-black border-2 overflow-y-scroll"}>
                 <h1 className={"text-green-700 text-2xl font-bold"}>
                     Avocado Toast browser extension
                     {JSON.stringify(selectedBookmarks)}
