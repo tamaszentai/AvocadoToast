@@ -16,5 +16,9 @@
     "32": "src/assets/icon32.png",
     "48": "src/assets/icon48.png",
     "128": "src/assets/icon128.png"
+  },
+  "minimum_size": {
+    "width": 800,
+    "height": 400
   }
 }

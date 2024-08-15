@@ -1,26 +1,42 @@
 import React from 'react';
+import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 
 interface ModalProps {
-    id: string;
+    currentBookmark: BookmarkTreeNode | null;
     removeBookmark: (id: string) => void;
     setIsModalOpen: (arg0: boolean) => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ id, removeBookmark, setIsModalOpen }) => {
+const Modal: React.FC<ModalProps> = ({ currentBookmark, removeBookmark, setIsModalOpen }) => {
     return (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50">
-            <div className="bg-white top-1/4 left-1/4 absolute w-1/2 h-1/2 m-auto p-4">
+        <div
+            className="z-10 fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center"
+            onClick={() => setIsModalOpen(false)}
+        >
+            <div
+                className="z-20 bg-white rounded-lg p-6 transform transition-transform duration-1000 ease-out scale-100"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <h1 className="text-red-700 text-2xl font-bold">Are you sure you want to delete this bookmark?</h1>
-                <p>{id}</p>
-                <button onClick={() => setIsModalOpen(false)}>No</button>
-                <button
-                    onClick={() => {
-                        removeBookmark(id);
-                        setIsModalOpen(false);
-                    }}
-                >
-                    Yes
-                </button>
+                <p className="my-4">{currentBookmark?.title || 'No title'}</p>
+                <p className="my-4">{currentBookmark?.url}</p>
+                <div className="flex justify-end space-x-4">
+                    <button
+                        className="bg-gray-300 px-4 py-2 rounded"
+                        onClick={() => setIsModalOpen(false)}
+                    >
+                        No
+                    </button>
+                    <button
+                        className="bg-red-700 text-white px-4 py-2 rounded"
+                        onClick={() => {
+                            removeBookmark(currentBookmark?.id || "");
+                            setIsModalOpen(false);
+                        }}
+                    >
+                        Yes
+                    </button>
+                </div>
             </div>
         </div>
     );

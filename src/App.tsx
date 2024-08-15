@@ -4,13 +4,16 @@ import Icon from './assets/icon128.png'
 import {useEffect, useState} from "react";
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 import Modal from "./components/Modal.tsx";
+import { Trash2 } from 'lucide-react';
+
 
 function App() {
 
     const [bookmarks, setBookmarks] = useState<BookmarkTreeNode[]>([]);
     const [selectedBookmarks, setSelectedBookmarks] = useState<number[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentBookmarkId, setCurrentBookmarkId] = useState<string | null>(null);
+    const [currentBookmark, setCurrentBookmark] = useState<BookmarkTreeNode | null>(null);
+    const [expandedNodes, setExpandedNodes] = useState<string[]>([]);
 
     useEffect(() => {
         fetchBookmarks();
@@ -20,11 +23,11 @@ function App() {
         chrome.bookmarks.getTree(
             function (bookmarkTreeNodes) {
                 if (bookmarkTreeNodes && bookmarkTreeNodes.length > 0) {
-                    setBookmarks(bookmarkTreeNodes);
+                    setBookmarks(bookmarkTreeNodes[0].children || []);
                 }
             }
         );
-    }
+    };
 
     const toDateString = (date: string | number | Date | undefined) => {
         return date ? new Date(date).toDateString() : "No date available";
@@ -40,25 +43,74 @@ function App() {
         });
     };
 
-    const renderBookmarks = (nodes: BookmarkTreeNode[]) => {
-        return nodes.map((node) => (
-            <div key={node.id} className="ml-4 border-black border-2">
-                <input
-                    type="checkbox"
-                    checked={selectedBookmarks.includes(node.id)}
-                    onChange={() => handleCheckboxChange(node.id)}
-                />
-                <p>{node.title || "No title"}</p>
-                <a href={node.url} target="_blank" rel="noopener noreferrer">{node.url}</a>
-                <p>Date added: {toDateString(node.dateAdded)}</p>
-                {node.children && renderBookmarks(node.children)}
-                <button className={"border-black border-2 bg-gray-400"} onClick={() => openModal(node.id)}>Delete Bookmark</button>
-            </div>
-        ));
+    const toggleNode = (nodeId: string) => {
+        setExpandedNodes((prevExpandedNodes) =>
+            prevExpandedNodes.includes(nodeId)
+                ? prevExpandedNodes.filter(id => id !== nodeId)
+                : [...prevExpandedNodes, nodeId]
+        );
     };
 
-    const openModal = (id: string) => {
-        setCurrentBookmarkId(id);
+    const renderBookmarks = (nodes: BookmarkTreeNode[]) => {
+        return nodes.map((node) => {
+            const isExpanded = expandedNodes.includes(node.id);
+            return (
+                <div key={node.id} className="m-4">
+                    <div
+                        className={`flex items-center p-2 border-2 border-gray-300 rounded-lg shadow-sm ${
+                            node.children ? 'bg-gray-300' : 'bg-white'
+                        }`}
+                    >
+                        {node.children && (
+                            <button
+                                onClick={() => toggleNode(node.id)}
+                                className="mr-2"
+                            >
+                                {isExpanded ? '-' : '+'}
+                            </button>
+                        )}
+                        {!node.children && (
+                            <input
+                                type="checkbox"
+                                checked={selectedBookmarks.includes(node.id)}
+                                onChange={() => handleCheckboxChange(node.id)}
+                                className="mr-2"
+                            />
+                        )}
+                        <p className="text-lg font-medium">
+                            {node.title || 'No title'}
+                        </p>
+                        {!node.children && node.url && (
+                            <div className="ml-auto flex items-center">
+                                <a
+                                    href={node.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-500 hover:underline break-all"
+                                >
+                                    {node.url}
+                                </a>
+                                <button
+                                    className="flex items-center text-red-600 hover:text-red-800 ml-2"
+                                    onClick={() => openModal(node)}
+                                >
+                                    <Trash2 />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                    {node.children && isExpanded && (
+                        <div className="ml-4">
+                            {renderBookmarks(node.children)}
+                        </div>
+                    )}
+                </div>
+            );
+        });
+    };
+
+    const openModal = (node: BookmarkTreeNode) => {
+        setCurrentBookmark(node);
         setIsModalOpen(true);
     }
 
@@ -70,10 +122,15 @@ function App() {
 
     return (
         <>
-            {isModalOpen && <Modal id={currentBookmarkId} removeBookmark={removeBookmark} setIsModalOpen={setIsModalOpen} />
-            }
-            <div className={"bg-amber-100 border-black border-2 overflow-y-scroll"}>
-                <h1 className={"text-green-700 text-2xl font-bold"}>
+            {isModalOpen && (
+                <Modal
+                    currentBookmark={currentBookmark}
+                    removeBookmark={removeBookmark}
+                    setIsModalOpen={setIsModalOpen}
+                />
+            )}
+            <div className="bg-slate-400">
+                <h1 className="text-gray-900 text-2xl font-bold">
                     BookmarkBuster browser extension
                     {JSON.stringify(selectedBookmarks)}
                 </h1>
@@ -81,7 +138,7 @@ function App() {
                 {renderBookmarks(bookmarks)}
             </div>
         </>
-    )
+    );
 }
 
 export default App
