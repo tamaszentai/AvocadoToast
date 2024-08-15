@@ -1,10 +1,11 @@
 /*global chrome*/
 import './App.css'
-import Icon from './assets/icon128.png'
 import {useEffect, useState} from "react";
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 import Modal from "./components/Modal.tsx";
-import { Trash2 } from 'lucide-react';
+import { Trash2, Plus, Minus } from 'lucide-react';
+import Header from "./components/Header.tsx";
+import StickyControls from "./components/StickyControls.tsx";
 
 
 function App() {
@@ -56,17 +57,17 @@ function App() {
             const isExpanded = expandedNodes.includes(node.id);
             return (
                 <div key={node.id} className="m-4">
-                    <div
+                    <div onClick={node.children ? () => toggleNode(node.id) : undefined }
                         className={`flex items-center p-2 border-2 border-gray-300 rounded-lg shadow-sm ${
-                            node.children ? 'bg-gray-300' : 'bg-white'
+                            node.children ? 'bg-gray-300 cursor-pointer hover:bg-gray-200' : 'bg-white'
                         }`}
+
                     >
                         {node.children && (
                             <button
-                                onClick={() => toggleNode(node.id)}
                                 className="mr-2"
                             >
-                                {isExpanded ? '-' : '+'}
+                                {isExpanded ? <Minus /> : <Plus />}
                             </button>
                         )}
                         {!node.children && (
@@ -129,12 +130,10 @@ function App() {
                     setIsModalOpen={setIsModalOpen}
                 />
             )}
+            {selectedBookmarks.length > 0 && <StickyControls/>}
             <div className="bg-slate-400">
-                <h1 className="text-gray-900 text-2xl font-bold">
-                    BookmarkBuster browser extension
-                    {JSON.stringify(selectedBookmarks)}
-                </h1>
-                <img src={Icon} alt="icon" />
+               <Header />
+                <input type={"text"} className="p-2 w-96 m-4 border-2 border-gray-300 rounded-lg shadow-sm" placeholder="Search..."/>
                 {renderBookmarks(bookmarks)}
             </div>
         </>

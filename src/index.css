@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 html, body {
-    min-width: 40rem;
-    min-height: 30rem;
+    min-width: 30rem;
+    min-height: 15rem;
     background: rgb(148 163 184);
+    font-family: 'Roboto', sans-serif;
 }
