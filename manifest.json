@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Avocado Toast Bookmark Manager",
+  "name": "BookmarkBuster Bookmark Manager",
   "version": "1.0",
-  "description": "Avocado Toast Bookmark Manager is a simple browser extension that helps you to manage your bookmarks.",
+  "description": "BookmarkBuster Bookmark Manager is a simple browser extension that helps you to manage your bookmarks.",
   "action": {
     "default_popup": "index.html"
   },

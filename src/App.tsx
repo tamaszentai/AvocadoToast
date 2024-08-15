@@ -74,7 +74,7 @@ function App() {
             }
             <div className={"bg-amber-100 border-black border-2 overflow-y-scroll"}>
                 <h1 className={"text-green-700 text-2xl font-bold"}>
-                    Avocado Toast browser extension
+                    BookmarkBuster browser extension
                     {JSON.stringify(selectedBookmarks)}
                 </h1>
                 <img src={Icon} alt="icon" />
