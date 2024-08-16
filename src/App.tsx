@@ -52,6 +52,10 @@ function App() {
         );
     };
 
+    const clearSelectedBookmarks = () => {
+        setSelectedBookmarks([]);
+    }
+
     const renderBookmarks = (nodes: BookmarkTreeNode[]) => {
         return nodes.map((node) => {
             const isExpanded = expandedNodes.includes(node.id);
@@ -110,8 +114,10 @@ function App() {
         });
     };
 
-    const openModal = (node: BookmarkTreeNode) => {
-        setCurrentBookmark(node);
+    const openModal = (node?: BookmarkTreeNode) => {
+        if (node) {
+            setCurrentBookmark(node);
+        }
         setIsModalOpen(true);
     }
 
@@ -121,16 +127,29 @@ function App() {
         });
     }
 
+    const removeSelectedBookmarks = () => {
+        selectedBookmarks.forEach(id => {
+            chrome.bookmarks.remove(id.toString()).then(_ => {
+                fetchBookmarks();
+            });
+        });
+        fetchBookmarks();
+        clearSelectedBookmarks();
+    }
+
+
     return (
         <>
             {isModalOpen && (
                 <Modal
                     currentBookmark={currentBookmark}
+                    selectedBookmarks={selectedBookmarks}
                     removeBookmark={removeBookmark}
+                    removeSelectedBookmarks={removeSelectedBookmarks}
                     setIsModalOpen={setIsModalOpen}
                 />
             )}
-            {selectedBookmarks.length > 0 && <StickyControls/>}
+            {selectedBookmarks.length > 0 && <StickyControls selectedBookmarks={selectedBookmarks} clearSelectedBookmarks={clearSelectedBookmarks} setIsModalOpen={setIsModalOpen}/>}
             <div className="bg-slate-400">
                <Header />
                 <input type={"text"} className="p-2 w-96 m-4 border-2 border-gray-300 rounded-lg shadow-sm" placeholder="Search..."/>
