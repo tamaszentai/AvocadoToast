@@ -20,8 +20,11 @@ const Modal: React.FC<ModalProps> = ({ currentBookmark, selectedBookmarks, remov
                 onClick={(e) => e.stopPropagation()}
             >
                 <h1 className="text-red-700 text-2xl font-bold">{currentBookmark ? "Are you sure you want to delete this bookmark?" : "Are you sure you want to delete the selected bookmark(s)?"} </h1>
-                <p className="my-4">{currentBookmark ? `${currentBookmark?.title} || 'No title'` : `${selectedBookmarks.length} selected`}</p>
-                <p className="my-4 truncate">{currentBookmark?.url}</p>
+                <p className="my-4">
+                    {currentBookmark
+                        ? (currentBookmark.title || 'No title')
+                        : `${selectedBookmarks.length} selected`}
+                </p>                <p className="my-4 truncate">{currentBookmark?.url}</p>
                 <div className="flex justify-end space-x-4">
                     <button
                         className="bg-gray-300 hover:bg-gray-200 px-4 py-2 rounded"

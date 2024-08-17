@@ -2,9 +2,9 @@ import Icon from "../assets/icon128.png";
 
 const Header = () => {
   return (
-      <header className={"flex items-center"}>
-          <img src={Icon} className={"w-24 drop-shadow-2xl"} alt="icon"/>
-          <h1 className="text-gray-900 text-3xl font-bold drop-shadow-2xl">
+      <header className={"flex items-center justify-center"}>
+          <img src={Icon} className={"w-16 drop-shadow-2xl"} alt="icon"/>
+          <h1 className="text-indigo-100 text-3xl font-bold drop-shadow-md">
               BookmarkBuster
           </h1>
       </header>

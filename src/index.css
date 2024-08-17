@@ -5,6 +5,11 @@
 html, body {
     min-width: 30rem;
     min-height: 15rem;
-    background: rgb(148 163 184);
-    font-family: 'Roboto', sans-serif;
+    background-image: linear-gradient(to right,
+    #6366f1 10%,  /* indigo-500 */
+    #0ea5e9 30%,  /* sky-500 */
+    #10b981 90%   /* emerald-500 */
+    );
+    user-select: none;
+    scrollbar-gutter: stable;
 }

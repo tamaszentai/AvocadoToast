@@ -63,7 +63,7 @@ function App() {
                 <div key={node.id} className="m-4">
                     <div onClick={node.children ? () => toggleNode(node.id) : undefined }
                         className={`flex items-center p-2 border-2 border-gray-300 rounded-lg shadow-sm ${
-                            node.children ? 'bg-gray-300 cursor-pointer hover:bg-gray-200' : 'bg-white'
+                            node.children ? 'bg-emerald-600 cursor-pointer hover:bg-emerald-700 text-white' : 'bg-white'
                         }`}
 
                     >
@@ -76,15 +76,16 @@ function App() {
                         )}
                         {!node.children && (
                             <input
+                                id={node.id}
                                 type="checkbox"
-                                checked={selectedBookmarks.includes(node.id)}
-                                onChange={() => handleCheckboxChange(node.id)}
+                                checked={selectedBookmarks.includes(Number(node.id))}
+                                onChange={() => handleCheckboxChange(Number(node.id))}
                                 className="mr-2"
                             />
                         )}
-                        <p className="text-lg font-medium">
+                        <label htmlFor={node.id} className="text-lg font-medium cursor-pointer">
                             {node.title || 'No title'}
-                        </p>
+                        </label>
                         {!node.children && node.url && (
                             <div className="ml-auto flex items-center">
                                 <a
@@ -149,10 +150,22 @@ function App() {
                     setIsModalOpen={setIsModalOpen}
                 />
             )}
-            {selectedBookmarks.length > 0 && <StickyControls selectedBookmarks={selectedBookmarks} clearSelectedBookmarks={clearSelectedBookmarks} setIsModalOpen={setIsModalOpen}/>}
-            <div className="bg-slate-400">
-               <Header />
-                <input type={"text"} className="p-2 w-96 m-4 border-2 border-gray-300 rounded-lg shadow-sm" placeholder="Search..."/>
+            {selectedBookmarks.length > 0 && (
+                <StickyControls
+                    selectedBookmarks={selectedBookmarks}
+                    clearSelectedBookmarks={clearSelectedBookmarks}
+                    setIsModalOpen={setIsModalOpen}
+                />
+            )}
+            <div className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
+                <Header />
+                <div className="flex justify-center items-center h-16">
+                    <input
+                        type="text"
+                        className="p-2 w-96 border-2 border-gray-600 rounded-lg shadow-sm"
+                        placeholder="Search..."
+                    />
+                </div>
                 {renderBookmarks(bookmarks)}
             </div>
         </>
