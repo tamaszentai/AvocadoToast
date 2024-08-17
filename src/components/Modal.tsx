@@ -7,13 +7,14 @@ interface ModalProps {
     removeBookmark: (id: string) => void;
     removeSelectedBookmarks: () => void;
     setIsModalOpen: (arg0: boolean) => void;
+    clearBookmarkState: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ currentBookmark, selectedBookmarks, removeBookmark, removeSelectedBookmarks, setIsModalOpen }) => {
+const Modal: React.FC<ModalProps> = ({ currentBookmark, selectedBookmarks, removeBookmark, removeSelectedBookmarks, setIsModalOpen, clearBookmarkState }) => {
     return (
         <div
             className="z-10 fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center"
-            onClick={() => setIsModalOpen(false)}
+            onClick={() => { setIsModalOpen(false); clearBookmarkState(); }}
         >
             <div
                 className="z-20 bg-white rounded-lg p-6 w-3/4 h-1/2 transform transition-transform duration-1000 ease-out scale-100"
@@ -28,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({ currentBookmark, selectedBookmarks, remov
                 <div className="flex justify-end space-x-4">
                     <button
                         className="bg-gray-300 hover:bg-gray-200 px-4 py-2 rounded"
-                        onClick={() => setIsModalOpen(false)}
+                        onClick={() => { setIsModalOpen(false); clearBookmarkState(); }}
                     >
                         No
                     </button>

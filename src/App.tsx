@@ -1,9 +1,8 @@
-/*global chrome*/
 import './App.css'
 import {useEffect, useState} from "react";
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 import Modal from "./components/Modal.tsx";
-import { Trash2, Plus, Minus } from 'lucide-react';
+import { Trash2, Plus, Minus, Info } from 'lucide-react';
 import Header from "./components/Header.tsx";
 import StickyControls from "./components/StickyControls.tsx";
 
@@ -30,9 +29,9 @@ function App() {
         );
     };
 
-    const toDateString = (date: string | number | Date | undefined) => {
-        return date ? new Date(date).toDateString() : "No date available";
-    }
+    // const toDateString = (date: string | number | Date | undefined) => {
+    //     return date ? new Date(date).toDateString() : "No date available";
+    // }
 
     const handleCheckboxChange = (bookmarkId: number) => {
         setSelectedBookmarks((prevSelectedBookmarks) => {
@@ -52,7 +51,8 @@ function App() {
         );
     };
 
-    const clearSelectedBookmarks = () => {
+    const clearBookmarkState = () => {
+        setCurrentBookmark(null);
         setSelectedBookmarks([]);
     }
 
@@ -97,10 +97,16 @@ function App() {
                                     {node.url}
                                 </a>
                                 <button
+                                    className="flex items-center text-gray-400 hover:text-gray-600 ml-2"
+
+                                >
+                                    <Info/>
+                                </button>
+                                <button
                                     className="flex items-center text-red-600 hover:text-red-800 ml-2"
                                     onClick={() => openModal(node)}
                                 >
-                                    <Trash2 />
+                                    <Trash2/>
                                 </button>
                             </div>
                         )}
@@ -135,7 +141,7 @@ function App() {
             });
         });
         fetchBookmarks();
-        clearSelectedBookmarks();
+        clearBookmarkState();
     }
 
 
@@ -148,12 +154,13 @@ function App() {
                     removeBookmark={removeBookmark}
                     removeSelectedBookmarks={removeSelectedBookmarks}
                     setIsModalOpen={setIsModalOpen}
+                    clearBookmarkState={clearBookmarkState}
                 />
             )}
             {selectedBookmarks.length > 0 && (
                 <StickyControls
                     selectedBookmarks={selectedBookmarks}
-                    clearSelectedBookmarks={clearSelectedBookmarks}
+                    clearBookmarkState={clearBookmarkState}
                     setIsModalOpen={setIsModalOpen}
                 />
             )}
