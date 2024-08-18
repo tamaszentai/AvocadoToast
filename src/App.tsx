@@ -193,13 +193,13 @@ function App() {
                             value={searchInput}
                             onChange={(e) => searchInputHandler(e.target.value)}
                         />
-                        <button
+                        {searchInput.length > 0 && <button
                             className="absolute inset-y-0 right-2 flex items-center"
                             onClick={() =>
                             {searchInputHandler(''); setSearchInput('');}}
                         >
                             <XCircle className="text-gray-600 w-6 h-6"/>
-                        </button>
+                        </button>}
                     </div>
                 </div>
                 {renderBookmarks(bookmarks)}
