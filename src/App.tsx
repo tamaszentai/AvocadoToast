@@ -14,6 +14,7 @@ function App() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentBookmark, setCurrentBookmark] = useState<BookmarkTreeNode | null>(null);
     const [expandedNodes, setExpandedNodes] = useState<string[]>([]);
+    const [searchInput, setSearchInput] = useState<string>('');
 
     useEffect(() => {
         fetchBookmarks();
@@ -144,6 +145,23 @@ function App() {
         clearBookmarkState();
     }
 
+    const searchBookmarks = (searchTerm: string) => {
+        chrome.bookmarks.search(searchTerm, (results) => {
+            setBookmarks(results);
+        });
+    }
+
+    const searchInputHandler = (e: string) => {
+        setSearchInput(e);
+        if (e.length > 0) {
+            searchBookmarks(e);
+        } else {
+            fetchBookmarks();
+        }
+    }
+
+
+
 
     return (
         <>
@@ -171,6 +189,7 @@ function App() {
                         type="text"
                         className="p-2 w-96 border-2 border-gray-600 rounded-lg shadow-sm"
                         placeholder="Search..."
+                        onChange={(e) => searchInputHandler(e.target.value)}
                     />
                 </div>
                 {renderBookmarks(bookmarks)}
