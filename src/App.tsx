@@ -2,7 +2,7 @@ import './App.css'
 import {useEffect, useState} from "react";
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 import Modal from "./components/Modal.tsx";
-import { Trash2, Plus, Minus, Info } from 'lucide-react';
+import {Trash2, Plus, Minus, Info, XCircle} from 'lucide-react';
 import Header from "./components/Header.tsx";
 import StickyControls from "./components/StickyControls.tsx";
 
@@ -183,14 +183,24 @@ function App() {
                 />
             )}
             <div className="bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
-                <Header />
+                <Header/>
                 <div className="flex justify-center items-center h-16">
-                    <input
-                        type="text"
-                        className="p-2 w-96 border-2 border-gray-600 rounded-lg shadow-sm"
-                        placeholder="Search..."
-                        onChange={(e) => searchInputHandler(e.target.value)}
-                    />
+                    <div className="relative">
+                        <input
+                            type="text"
+                            className="p-2 w-96 border-2 border-gray-600 rounded-lg shadow-sm pr-10"
+                            placeholder="Search..."
+                            value={searchInput}
+                            onChange={(e) => searchInputHandler(e.target.value)}
+                        />
+                        <button
+                            className="absolute inset-y-0 right-2 flex items-center"
+                            onClick={() =>
+                            {searchInputHandler(''); setSearchInput('');}}
+                        >
+                            <XCircle className="text-gray-600 w-6 h-6"/>
+                        </button>
+                    </div>
                 </div>
                 {renderBookmarks(bookmarks)}
             </div>
