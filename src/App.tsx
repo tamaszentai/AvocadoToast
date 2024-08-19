@@ -5,6 +5,7 @@ import Modal from "./components/Modal.tsx";
 import {Trash2, Plus, Minus, Info, XCircle} from 'lucide-react';
 import Header from "./components/Header.tsx";
 import StickyControls from "./components/StickyControls.tsx";
+import {Link} from "react-router-dom";
 
 
 function App() {
@@ -97,12 +98,13 @@ function App() {
                                 >
                                     {node.url}
                                 </a>
-                                <button
+                                <Link to={`/bookmark/${node.id}`}
                                     className="flex items-center text-gray-400 hover:text-gray-600 ml-2"
+
 
                                 >
                                     <Info/>
-                                </button>
+                                </Link>
                                 <button
                                     className="flex items-center text-red-600 hover:text-red-800 ml-2"
                                     onClick={() => openModal(node)}
