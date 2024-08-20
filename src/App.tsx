@@ -99,9 +99,8 @@ function App() {
                                     {node.url}
                                 </a>
                                 <Link to={`/bookmark/${node.id}`}
+                                      state={{ node }}
                                     className="flex items-center text-gray-400 hover:text-gray-600 ml-2"
-
-
                                 >
                                     <Info/>
                                 </Link>
