@@ -31,10 +31,6 @@ function App() {
         );
     };
 
-    // const toDateString = (date: string | number | Date | undefined) => {
-    //     return date ? new Date(date).toDateString() : "No date available";
-    // }
-
     const handleCheckboxChange = (bookmarkId: number) => {
         setSelectedBookmarks((prevSelectedBookmarks) => {
             if (prevSelectedBookmarks.includes(bookmarkId)) {
