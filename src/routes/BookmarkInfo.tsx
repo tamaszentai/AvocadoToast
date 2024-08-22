@@ -48,6 +48,8 @@ const BookmarkInfo: React.FC = () => {
                 <div className="my-2">
                     <span className="font-semibold">Parent ID: </span>{node?.parentId || "Not available"}
                 </div>
+
+                <iframe src={node?.url} className="w-full h-96 mt-4" title="Bookmark Info" />
             </div>
         </div>
     );
