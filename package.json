@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "author": {
     "email": "zentaitamas@gmail.com",
@@ -18,7 +19,8 @@
     "lucide-react": "^0.427.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.1"
+    "react-router-dom": "^6.26.1",
+    "vitest": "^2.0.5"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.25",
